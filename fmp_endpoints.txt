@@ -1,0 +1,93 @@
+analyst estimates
+
+https://financialmodelingprep.com/api/v3/analyst-estimates/AAPL?apikey=
+
+path: symbol
+query: period and Limit
+
+
+analyst recommendations
+
+https://financialmodelingprep.com/api/v3/analyst-stock-recommendations/AAPL?apikey=
+
+symbol
+______________________________________________________________________________________________________________
+
+
+income statements as reported
+
+https://financialmodelingprep.com/api/v3/income-statement-as-reported/AAPL?period=annual&limit=50&apikey=
+
+path: symbol
+query: period, datatype, limit
+
+
+balance sheet statements
+
+https://financialmodelingprep.com/api/v3/balance-sheet-statement-as-reported/AAPL?period=annual&limit=50&apikey=
+//
+
+cash flow statements
+
+https://financialmodelingprep.com/api/v3/cash-flow-statement-as-reported/AAPL?period=annual&limit=50&apikey=
+
+//
+
+full financial statements
+
+https://financialmodelingprep.com/api/v3/financial-statement-full-as-reported/AAPL?period=annual&limit=50&apikey=
+
+//
+________________________________________________________________________________________________________________
+
+Key Metrics
+
+https://financialmodelingprep.com/api/v3/key-metrics/AAPL?period=annual&apikey=
+
+path: symbol
+query: period, limit
+
+Ratios
+
+https://financialmodelingprep.com/api/v3/ratios/AAPL?period=quarter&apikey=
+
+//
+
+Cashflow Growth
+
+https://financialmodelingprep.com/api/v3/cash-flow-statement-growth/AAPL?period=annual&apikey=
+
+//
+
+Income Growth
+
+https://financialmodelingprep.com/api/v3/income-statement-growth/AAPL?period=annual&apikey=
+
+//
+
+Balance Sheet Growth
+
+https://financialmodelingprep.com/api/v3/balance-sheet-statement-growth/AAPL?period=annual&apikey=
+
+//
+
+
+
+Key Metrics TTM
+
+https://financialmodelingprep.com/api/v3/key-metrics-ttm/AAPL?apikey=
+
+path: symbol
+
+Ratios TTM
+
+https://financialmodelingprep.com/api/v3/ratios-ttm/AAPL?apikey=
+
+___________________________________________________________________________________________________________
+
+historical stock data
+
+https://financialmodelingprep.com/api/v3/historical-price-full/AAPL?apikey=
+
+path: symbol, timeframe (1min, 5min, 15min, 30min, 1hour, 4hour)
+query: from and to (eg. from=2023-08-10&to=2023-09-10&apikey=), extended(boolean default false)

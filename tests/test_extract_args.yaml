@@ -1,0 +1,11 @@
+symbols:
+    - AAPL
+    - MSFT
+requests:
+    - all
+queries:
+    - from=2025-05-01
+    - to=2025-05-05
+    - period=annual
+    - limit=1
+save_to: test

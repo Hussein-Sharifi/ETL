@@ -1,0 +1,6 @@
+{
+	"income_statement": "https://financialmodelingprep.com/api/v3/income-statement/{symbol}?{query}apikey=",
+	"balance_sheet": "https://financialmodelingprep.com/api/v3/balance-sheet-statement/{symbol}?{query}apikey=",
+	"cashflow": "https://financialmodelingprep.com/api/v3/cash-flow-statement/{symbol}?{query}apikey=",
+	"stock": "https://financialmodelingprep.com/api/v3/historical-price-full/{symbol}?{query}apikey="
+}
