@@ -3,3 +3,4 @@ __pycache__
 credentials.env
 *.env
 analysis_data
+backup
