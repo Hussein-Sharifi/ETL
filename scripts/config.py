@@ -43,10 +43,11 @@ def fetch_postgresql_credentials() -> dict:
     """
     
     sql_credentials = POSTGRESQL_CONFIG = {
+    "drivername": "postgresql+psycopg2",
     "host": os.getenv("DB_HOST"),
     "port": int(os.getenv("DB_PORT")),
-    "dbname": os.getenv("DB_NAME"),
-    "user": os.getenv("DB_USER"),
+    "database": os.getenv("DB_NAME"),
+    "username": os.getenv("DB_USER"),
     "password": os.getenv("DB_PASSWORD")
     }
     
@@ -54,20 +55,3 @@ def fetch_postgresql_credentials() -> dict:
         raise ValueError(f"sql credentials not found in environment. Check your .env file at {ENV_PATH}")
     
     return sql_credentials
-
-
-def connect_to_postgresql():
-    """
-    Connect to PostgreSQL database using credentials from .env file.
-    """
-
-    sql_credentials = fetch_postgresql_credentials()
-
-    try:
-        conn = psycopg2.connect(**sql_credentials)
-        cur = conn.cursor()
-        print("Connection successful!")
-        return conn, cur
-    except Exception as e:
-        print(f"Connection failed: {e}")
-        raise

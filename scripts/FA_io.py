@@ -78,7 +78,7 @@ def load_raw_data(symbols: list, documents: list, folder: str):
 
     return financial_data
 
-def save_processed_data(dataframes: dict, save_to: str) -> None:
+def save_to_excel(save_to, dfs) -> None:
     """
     Save processed data to data/processed as JSON file.
     """
@@ -88,5 +88,5 @@ def save_processed_data(dataframes: dict, save_to: str) -> None:
     os.makedirs(output_dir, exist_ok=True)
 
     # Save dataframes to 
-    for key in dataframes.keys():
-        dataframes[key].to_parquet(os.path.join(output_dir, f"{key}.parquet"), index=False)
+    for statement, dataframe in dfs.items():
+        dataframe.to_excel(os.path.join(output_dir, f"{statement}.xlsx"), index=False)

@@ -3,7 +3,7 @@ import json
 import logging
 from typing import Dict, List, Optional
 from config import DEFAULT_ENDPOINTS_PATH
-from FA_io import load_data
+from FA_io import load_raw_data
 
 
 # logging configuration
@@ -72,7 +72,7 @@ def parse_to_dataframes(financial_data):
             # For each symbol
             for symbol_data in financial_data[document]:
                 
-                # Check for expected format
+                # Ensure expected stock format
                 if 'historical' not in symbol_data or not isinstance(symbol_data['historical'], list):
                     logging.warning(f"Malformed stock data for {symbol_data.get('symbol', 'UNKNOWN')}; skipping.")
                     continue
@@ -82,13 +82,15 @@ def parse_to_dataframes(financial_data):
                 df['symbol'] = symbol_data['symbol']
                 df.insert(1, 'symbol', df.pop('symbol'))
 
-                # If document data hasn't been assigned yet, assign dataframe,
-                # otherwise concatenate it with existing dataframe
+                # Change date column to datetime
+                if 'date' in df.columns:
+                    df['date'] = pd.to_datetime(df['date'], format='%Y-%m-%d')
+
+                # Add data. Create document key if it doesn't exist
                 if document not in dataframes:
                     dataframes[document] = df
                 else:
                     dataframes[document] = pd.concat([dataframes[document], df])
-        
         
         # Process other documents format
         else:
@@ -103,11 +105,34 @@ def parse_to_dataframes(financial_data):
                 # Create dataframe
                 df = pd.DataFrame(symbol_data)
 
-                # If document data hasn't been assigned yet, assign dataframe,
-                # otherwise concatenate it with existing dataframe
+                # Change date column to datetime
+                if 'date' in df.columns:
+                    df['date'] = pd.to_datetime(df['date'], format='%Y-%m-%d')
+
+                # Add data. Create document key if it doesn't exist
                 if document not in dataframes:
                     dataframes[document] = df
                 else:
                     dataframes[document] = pd.concat([dataframes[document], df])
 
     return dataframes
+
+
+def melt_statements(dfs: dict) -> pd.DataFrame:
+    """
+    Takes in a dictionary of DataFrames and melts statements into long format.
+    """
+
+    # Identify columns to keep as identifiers and columns to drop
+    id_vars = ['date', 'symbol', 'cik', 'reportedCurrency']
+    drop_columns = ['link', 'finalLink', 'fillingDate', 'acceptedDate', 'calendarYear', 'period']
+    
+    # Melt each statement DataFrame
+    melted_frames = [
+    df.drop(columns=[c for c in drop_columns if c in df.columns])
+      .melt(id_vars=id_vars, var_name='metric', value_name='value')
+      .assign(statement_type=name)
+    for name, df in dfs.items() if name != 'stock'
+    ]
+
+    return pd.concat(melted_frames, ignore_index=True)
