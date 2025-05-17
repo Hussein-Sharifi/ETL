@@ -6,4 +6,4 @@ python scripts/extract_data.py --manual --symbols AAPL MSFT --requests cashflow 
 
 
 yaml test:
-python scripts/extract_data.py --config <fetch_extract_args.yaml path>
+python scripts/extract_data.py --config <test_extract.yaml path>
