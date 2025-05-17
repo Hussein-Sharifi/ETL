@@ -15,12 +15,14 @@ This project is an end-to-end ETL pipeline that:
 2. [Getting Started](#getting-started)  
     1. [Using Conda (Recommended)](#using-conda-recommended)  
     2. [Without Conda (Using pip)](#without-conda-using-pip)  
+    3. [Configuration](#configuration)
 3. [License & Data Usage](#license--data-usage)  
 
 ---
 
 ## Project Structure
 
+```
 Project_Root
 │   .gitignore
 │   environment.yml
@@ -54,6 +56,7 @@ Project_Root
 └───tests
         test_extract.txt
         test_extract.yaml
+```
 
 ## Getting Started
 To ensure compatibility, it is recommended to create a clean Conda environment.
@@ -72,12 +75,14 @@ Follow through with the installation, then run
 conda activate FAenv
 ```
 
-Without Conda (Using pip)
+### Without Conda (Using pip)
 If you prefer not to use Conda, install dependencies using pip:
 
 ```
 pip install -r requirements.txt
 ```
+
+### Configuration
 
 ## License & Data Usage
 This project utilizes data from Financial Modeling Prep through their public API. Data is used for educational purposes only and is not redistributed. Models, visualizations, and source code are shared under fair use for learning and demonstration.
