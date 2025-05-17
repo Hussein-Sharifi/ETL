@@ -29,7 +29,6 @@ Project_Root
 │   README.md
 │
 ├───config
-│       .env
 │       default_endpoints.json
 │       example_env.txt
 │
