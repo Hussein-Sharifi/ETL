@@ -37,20 +37,17 @@ Project_Root
 │   └───raw
 │
 ├───outputs
-│   ├───figures
-│   ├───models
-│   └───tables
+│   
 ├───scripts
-│   │   config.py
-│   │   extract_data.py
-│   │   FA_io.py
-│   │   fmp_client.py
-│   │   parser.py
-│   │   sql_transforms.py
-│   │   sql_utils.py
-│   │   transform_data.py
-│   └─ utils.py
-│
+│       config.py
+│       extract_data.py
+│       FA_io.py
+│       fmp_client.py
+│       parser.py
+│       sql_transforms.py
+│       sql_utils.py
+│       transform_data.py
+│       utils.py
 │
 └───tests
         test_extract.txt
