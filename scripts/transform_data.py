@@ -4,6 +4,7 @@ from utils import parse_to_dataframes, melt_statements
 from FA_io import load_raw_data
 from parser import get_parser_args, load_config, parse_inputs
 from sql_utils import connect_to_postgresql, create_table
+import sql_transforms
 
 # logging configuration
 logging.basicConfig(
@@ -23,13 +24,15 @@ def main(symbols: list, documents: list, load_from: str):
     dfs = parse_to_dataframes(data)
     stocks = dfs.pop('stock')
 
+     
+
     # Melt statement dataframes for easier analysis
     logging.info("Melting statement DataFrames...")
     tidy_statements = melt_statements(dfs)
 
     # Computing indicators with SQL
     logging.info("Computing indicators with SQL...")
-    "sql_processing(dfs['stock'], tidy_statements)"
+    sql_transforms.main(stocks, tidy_statements, folder_name=load_from)
 
     # Save statements to Excel
     logging.info("Saving statements to Excel...")

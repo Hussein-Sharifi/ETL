@@ -1,4 +1,4 @@
-from sql_utils import connect_to_postgresql, create_table
+from sql_utils import connect_to_postgresql, create_table, table_query
 from sqlalchemy import text
 import pandas as pd
 
@@ -22,11 +22,27 @@ def main(stocks, tidy_statements, folder_name):
         engine, 
         if_exists='replace', 
         index=False, 
-        method='multi'
+        method='multi',
         chunksize=10000
     )
 
-query = "SELECT * FROM overwrite_stocks LIMIT 10;"
+    # Create indicators tables
+    profitability = table_query(
+        numeric_indicators=[
+            'gross_profit_margin', 
+            'operating_margin', 
+            'net_profit_margin', 
+            'return_on_equity', 
+            'return_on_assets'
+        ],
+        string_indicators=[
+            'company_name', 
+            'symbol'
+        ]
+    )
+
+
+query = "SELECT * FROM overwrite_tidy LIMIT 10;"
 with engine.connect() as conn:
     result_df = pd.read_sql(text(query), conn)
 

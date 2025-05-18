@@ -118,7 +118,39 @@ def parse_to_dataframes(financial_data):
     return dataframes
 
 
-def melt_statements(dfs: dict) -> pd.DataFrame:
+def wide_format(dfs: dict) -> pd.DataFrame:
+    """
+    Takes in a dictionary of statements dataframes and converts them to wide format.
+    
+    dfs: dictionary with keys income_statement, balance_sheet, and cashflow
+    """
+
+    # Merge all statements into a single DataFrame
+    merged = pd.merge(
+        dfs['income_statement'],
+        dfs['balance_sheet'],
+        on=['date', 'symbol'],
+        how='inner',
+        suffixes=('', '_bs')
+    )
+
+    # Merge with cashflow
+    merged = pd.merge(
+        merged,
+        dfs['cashflow'],
+        on=['date', 'symbol'],
+        how='inner',
+        suffixes=('', '_bs')
+    )
+
+    # Remove duplicate columns
+    drop_columns = [col for col in merged.columns if col.endswith('_bs')]
+    merged = merged.drop(columns=drop_columns)
+
+    return merged
+
+
+def long_format(dfs: dict) -> pd.DataFrame:
     """
     Takes in a dictionary of DataFrames and melts statements into long format.
     """
