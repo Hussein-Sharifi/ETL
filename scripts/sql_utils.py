@@ -1,6 +1,6 @@
 import pandas as pd
 import logging
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.engine import URL
 from config import fetch_postgresql_credentials
 
@@ -29,61 +29,46 @@ def connect_to_postgresql():
         raise
 
 
-def create_table(engine, table_name, columns_with_types, folder_name):
+def create_table(engine, query: str, table_name: str):
     """
     Create a table in the PostgreSQL database based on a DataFrame's dtypes.
 
     Args:
     engine: SQLAlchemy engine instance.
-    table_name: Name of the table to create.
-    columns: desired columns with their types.
-    folder_name: Name of the folder to prefix the table name.
+    query: SQL query string to create the table.
     """
-
-    # Create SQL query to create table
-    create_table_query = f"CREATE TABLE IF NOT EXISTS {folder_name}_{table_name} {columns_with_types};"
 
     # Execute and commit the query
     try:
         with engine.connect() as conn:
-            conn.execute(create_table_query)
+            conn.execute(query)
             conn.commit()
         logging.info(f"Table {table_name} created successfully.")
     except Exception as e:
-        logging.warning(f"Failed to create table {table_name}: {e}")
+        logging.warning(f"Failed to create {table_name} table: {e}")
     
 
-def profitability_indicators_table(tables: list, folder_name: str):
+def create_profitability(engine, wide: pd.DataFrame, folder_name: str, name: str = "profitability_indicators"):
     """
     Create a table for profitability indicators in PostgreSQL.
     """
 
-    columns = {
-        'date': "DATE",
-        'symbol': "VARCHAR(10)",
-        ''
-    }
+    table_name = f"{folder_name}_{name}"
 
-    """CREATE TABLE profitability_indicators AS (
+    profitability_indicators = text(f"""
+    DROP TABLE IF EXISTS {table_name};
+    CREATE TABLE {folder_name}_profitability_indicators AS (
         SELECT
             date,
             symbol,
-            netIncome/totalEquity AS return_on_equity,
-            netIncome/totalAssets AS return_on_assets,
-            grossProfit/revenue AS gross_profit_margin,
-            operatingIncome/revenue AS operating_margin,
-            netIncome/revenue AS net_profit_margin
+            ("netIncome" * 1.0)/"totalEquity" AS return_on_equity,
+            ("netIncome" * 1.0)/"totalAssets" AS return_on_assets,
+            ("operatingIncome" * 1.0)/("totalAssets" - "totalLiabilities") AS return_on_invested_capital,
+            ("grossProfit" * 1.0)/revenue AS gross_profit_margin,
+            ("operatingIncome" * 1.0)/revenue AS operating_margin,
+            ("netIncome" * 1.0)/revenue AS net_profit_margin
         FROM
-            tidy_statements
-    );"""
+            {folder_name}_merged as m
+    );""")
 
-    if numeric_indicators:
-        for indicator in numeric_indicators:
-            columns[indicator] = "FLOAT"
-    else:
-        logging.warning("No numeric indicators provided.")
-
-    # Convert dictionary to SQLAlchemy-compatible string
-    columns = ", ".join([f"{col} {dtype}" for col, dtype in columns.items()])
-    
-    return columns
+    create_table(engine, profitability_indicators, table_name)
