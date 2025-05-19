@@ -1,45 +1,101 @@
-from sql_utils import connect_to_postgresql, create_table, create_profitability
+from sql_utils import connect_to_postgresql, create_indicators
 from sqlalchemy import text
+from utils import long_format
+import logging
 import pandas as pd
 
+# logging configuration
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
-def main(stocks, merged_statements, folder_name):
+
+def main(stocks, wide_statements, tidy_statements, folder_name, documents, timestamp = False):
     # Connect to PostgreSQL and return connection instance
     engine = connect_to_postgresql()
+    with engine.connect() as conn:
+        db_info = conn.execute(text("SELECT current_database(), current_user;")).fetchone()
+        logging.info(f"Connected to database: {db_info[0]} as user: {db_info[1]}")
+    
+    # Determine if the tables should be replaced or appended
+    if timestamp:
+        if_exists = 'append'
+    else:
+        if_exists = 'replace'
+
 
     # Upload dataframes to PostgreSQL
-    stocks.to_sql(
-        f"{folder_name}_stocks", 
+    logging.info("Uploading dataframes to PostgreSQL...")
+    if documents == 'all' or 'stocks':
+        stocks.to_sql(
+            f"{folder_name}_stocks", 
+            engine, 
+            if_exists=if_exists, 
+            index=False, 
+            method='multi', 
+            chunksize=10000
+        )
+        logging.info(f"Table {folder_name}_stocks successfully created/updated.")
+    if documents == 'all' or 'statements':
+        wide_statements.to_sql(
+            f"{folder_name}_statements", 
+            engine, 
+            if_exists=if_exists, 
+            index=False, 
+            method='multi',
+            chunksize=10000
+        )
+        logging.info(f"Table {folder_name}_statements successfully created/updated.")
+        logging.info("Computing statement indicators in SQL.")
+        # Compute statement indicators in SQL
+        create_indicators(engine, wide_statements, folder_name, timestamp)
+
+    # Read indicators from PostgreSQL
+    indicators = {}
+    for type in ['profitability', 'leverage', 'liquidity']:
+        query = f"SELECT * FROM {folder_name}_{type};"
+        with engine.connect() as conn:
+            indicators[type] = pd.read_sql(query, conn)
+    # Convert indicators to long format
+    logging.info("Converting indicators to long format...")
+    tidy_indicators = long_format(indicators)
+
+
+    # Replace wide format statements with long format in PostgreSQL
+    # Drop wide format tables
+    logging.info("Replacing wide format statements with long format")
+    logging.info(f"Uploading long tables...")
+    # Upload tidy indicators
+    tidy_indicators.to_sql(
+        f"{folder_name}_indicators", 
         engine, 
-        if_exists='replace', 
+        if_exists=if_exists, 
         index=False, 
         method='multi', 
         chunksize=10000
     )
-    
-    merged_statements.to_sql(
-        f"{folder_name}_merged", 
+    logging.info(f"Table {folder_name}_indicators successfully created.")
+
+    # Upload tidy statements
+    tidy_statements.to_sql(
+        f"{folder_name}_tidy", 
         engine, 
-        if_exists='replace', 
+        if_exists=if_exists, 
         index=False, 
-        method='multi',
+        method='multi', 
         chunksize=10000
     )
-
-    # Create indicators tables
-    if statements:
-        profitability_indicators = create_profitability(engine, merged_statements, folder_name)
-        efficiency_indicators = create_efficiency(engine, merged_statements, folder_name)
-        liquidity_indicators = create_liquidity(engine, merged_statements, folder_name)
-        leverage_indicators = create_leverage(engine, merged_statements, folder_name)
-        valuation_indicators = create_valuation(engine, merged_statements, folder_name)
-        solvency_indicators = create_solvency(engine, merged_statements, folder_name)
-
-    if stocks:
-        stock_indicators = create_stock_indicators(engine, stocks, folder_name)
-
-query = "SELECT * FROM overwrite_tidy LIMIT 10;"
-with engine.connect() as conn:
-    result_df = pd.read_sql(text(query), conn)
-
+    logging.info(f"Table {folder_name}_tidy successfully created.")
+    
+    # Drop the original tables
+    logging.info("Dropping wide tables...")
+    with engine.begin() as conn:
+        conn.execute(text(f"DROP TABLE IF EXISTS {folder_name}_profitability;"))
+        conn.execute(text(f"DROP TABLE IF EXISTS {folder_name}_leverage;"))
+        conn.execute(text(f"DROP TABLE IF EXISTS {folder_name}_liquidity;"))
+        conn.execute(text(f"DROP TABLE IF EXISTS {folder_name}_statements;"))
+    
+    logging.info(f"SQL transformations successfully completed. Closing connection to PostgreSQL.")
+    engine.dispose()
     

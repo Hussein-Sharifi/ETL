@@ -143,6 +143,7 @@ def wide_format(dfs: dict) -> pd.DataFrame:
         suffixes=('', '_bs')
     )
 
+
     # Remove duplicate columns
     drop_columns = [col for col in merged.columns if col.endswith('_bs')]
     merged = merged.drop(columns=drop_columns)
@@ -152,11 +153,11 @@ def wide_format(dfs: dict) -> pd.DataFrame:
 
 def long_format(dfs: dict) -> pd.DataFrame:
     """
-    Takes in a dictionary of DataFrames and melts statements into long format.
+    Takes in a dictionary of statement DataFrames and melts statements into long format.
     """
 
     # Identify columns to keep as identifiers and columns to drop
-    id_vars = ['date', 'symbol', 'cik', 'reportedCurrency']
+    id_vars = ['date', 'symbol']
     drop_columns = ['link', 'finalLink', 'fillingDate', 'acceptedDate', 'calendarYear', 'period']
     
     # Melt each statement DataFrame
@@ -165,6 +166,6 @@ def long_format(dfs: dict) -> pd.DataFrame:
       .melt(id_vars=id_vars, var_name='metric', value_name='value')
       .assign(statement_type=name)
     for name, df in dfs.items() if name != 'stock'
-    ]
+]
 
     return pd.concat(melted_frames, ignore_index=True)

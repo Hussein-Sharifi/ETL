@@ -1,7 +1,8 @@
 import argparse
 import yaml
 import logging
-import datetime
+from datetime import datetime
+from datetime import datetime
 
 # logging configuration
 logging.basicConfig(
@@ -20,9 +21,10 @@ def get_parser_args():
 
     # Add arguments for manual input
     parser.add_argument('--symbols', nargs='+', help='List of ticker symbols')
-    parser.add_argument('--requests', nargs='+', help='Choose endpoint to fetch from the API. Options: "stock", "income_statement", "cashflow", "balance_sheet", or "all"')
+    parser.add_argument('--requests', nargs='+', help='Choose endpoint to fetch from the API. Options: "stock", "statements", or "all"')
     parser.add_argument('--queries', nargs='+', help='Query parameters like "from=2022-01-01" "to=2022-12-31"')
-    parser.add_argument('--save_to', default = 'timestamp', help='Choose folder_name to save JSON data in data/raw/<folder_name>. Built-in support for "timestamp", or "none" to skip save')
+    parser.add_argument('--save_to', help='Folder name to save data. Uppercase and lowercase letters, numbers, and underscores only. This will also be used as SQL table name prefix.')
+    parser.add_argument('--timestamp', action='store_true', help='Adds timestamp to saved file names. Use for scheduled jobs.')
 
     args = parser.parse_args()
 
@@ -64,7 +66,7 @@ def parse_queries(queries: list):
     return queries
 
 
-def parse_inputs(symbols: list, requests: list, queries: list = None, save_to: str = 'timestamp'):
+def parse_inputs(symbols: list, requests: list, queries: list = None, save_to: str = None, timestamp: bool = False):
     '''
     Parse and validate CLI arguments.
     '''
@@ -75,16 +77,25 @@ def parse_inputs(symbols: list, requests: list, queries: list = None, save_to: s
     
     # Recommend and parse queries
     if not queries:
-        logging.warning("No query argument passed. Fetching only most recent quarter and/or current stock data")
+        logging.warning("No query argument passed. Fetching only most recent statements and/or current stock data")
         queries = {}
     else:
         queries = parse_queries(queries)
+    
+    if timestamp:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     
     for request in requests:
         if request == 'all':
             requests = ['stock', 'income_statement', 'cashflow', 'balance_sheet']
             break
-        if request not in ['stock', 'income_statement', 'cashflow', 'balance_sheet', 'all']:
-            raise KeyError(f"Did not recognize {request} request argument. Options: 'stock', 'income_statement', 'cashflow', 'balance_sheet', or 'all'")
+        elif request == 'statements':
+            requests = ['income_statement', 'cashflow', 'balance_sheet']
+            break
+        elif request == 'stock':
+            requests = ['stock']
+            break
+        elif request not in ['stock', 'statements', 'all']:
+            raise KeyError(f"Did not recognize {request} request argument. Options: 'stock', 'statements', or 'all'")
     
-    return symbols, requests, queries, save_to
+    return symbols, requests, queries, save_to, timestamp

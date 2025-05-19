@@ -1,7 +1,6 @@
 import os
 import json
 import logging
-from datetime import datetime
 from config import PROJECT_ROOT, DATA_DIR, DEFAULT_ENDPOINTS_PATH
 
 
@@ -12,21 +11,14 @@ logging.basicConfig(
 )
 
 
-def save_raw_data(data: dict, symbols: list, requests: list, save_to: str) -> None:
+def save_raw_data(data: dict, symbols: list, requests: list, save_to: str, timestamp: bool = False) -> None:
     """
     Save fetched data to data/raw as JSON file.
     """
 
-    # If using timestamp, save to timestamp directory
-    if save_to == 'timestamp':
-        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        output_dir = os.path.join(DATA_DIR, "raw", timestamp)
-        os.makedirs(output_dir, exist_ok=True)
-    
-    # If using custom folder name, save to folder name
-    else:
-        output_dir = os.path.join(DATA_DIR, "raw", save_to)
-        os.makedirs(output_dir, exist_ok=True)        
+    # Create output directory
+    output_dir = os.path.join(DATA_DIR, "raw", save_to)
+    os.makedirs(output_dir, exist_ok=True)        
 
 
     # For each symbol
@@ -43,14 +35,17 @@ def save_raw_data(data: dict, symbols: list, requests: list, save_to: str) -> No
             symbol_data = data.get(request, {}).get(symbol)
             if symbol_data:
                 
-                # Save data
-                filename = os.path.join(symbol_dir, f"{symbol}_{request}.json")
+                # Save data. Use timestamp if specified.
+                if timestamp:
+                    filename = os.path.join(symbol_dir, f"{symbol}_{request}_{timestamp}.json")
+                else:
+                    filename = os.path.join(symbol_dir, f"{symbol}_{request}.json")
                 with open(filename, 'w') as f:
                     json.dump(symbol_data, f, indent=2)
                 logging.info(f"Saved {symbol} {request} to {filename}")
 
 
-def load_raw_data(symbols: list, documents: list, folder: str):    
+def load_raw_data(symbols: list, documents: list, folder: str, timestamp=False):
     raw_data_path = os.path.join(DATA_DIR, 'raw', folder)
     financial_data = {}
 
@@ -60,7 +55,10 @@ def load_raw_data(symbols: list, documents: list, folder: str):
 
         # Append document data for each symbol if said data exists
         for symbol in symbols:
-                input_path = os.path.join(raw_data_path, symbol, f"{symbol}_{document}.json")
+                if timestamp:
+                    input_path = os.path.join(raw_data_path, symbol, f"{symbol}_{document}_{timestamp}.json")
+                else:
+                    input_path = os.path.join(raw_data_path, symbol, f"{symbol}_{document}.json")
                 if not os.path.exists(input_path):
                     logging.warning(f"File not found: {input_path}")
                     continue

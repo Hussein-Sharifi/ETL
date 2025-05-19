@@ -1,9 +1,0 @@
-From financial_analysis directory, run
-
-
-Manual test:
-python scripts/extract_data.py --manual --symbols AAPL MSFT --requests cashflow --queries "from=2025-04-01" "to=2025-05-01" "period=annual" "limit=1" --save_to timestamp
-
-
-yaml test:
-python scripts/extract_data.py --config <test_extract.yaml path>
