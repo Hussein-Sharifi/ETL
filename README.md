@@ -115,7 +115,7 @@ The main pipeline script is `ETL.py`. It accepts several arguments to customize 
 - `--config`: Path to a YAML file with pre-defined arguments.
 - `--symbols`: Space-separated list of stock symbols (e.g., `AAPL MSFT GOOG`).
 - `--requests`: Type of data to fetch (`stock`, `statement`, or `all`). Currently, only `all` is supported.
-- `--queries`: API query parameters in a space-separated list format:
+- `--queries`: space-separated API query parameters in the format:
   - `"from=YYYY-MM-DD"`
   - `"to=YYYY-MM-DD"`
   - `"period=annual|quarterly"` (Note: quarterly data requires an FMP subscription)
