@@ -74,7 +74,7 @@ git clone https://github.com/Hussein-Sharifi/ETL
 
 To ensure compatibility, it’s recommended to use a clean Conda environment.
 
-### Using Conda (Recommended)
+### 	1. Using Conda (Recommended)
 
 From the project root directory, create the environment:
 
@@ -88,7 +88,7 @@ Once installed, activate the environment:
 conda activate FAenv
 ```
 
-### Without Conda (Using pip)
+###	2. Without Conda (Using pip)
 
 If you prefer not to use Conda, install the required dependencies using pip:
 
