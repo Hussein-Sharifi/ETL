@@ -156,7 +156,7 @@ python scripts/ETL.py --config tests/test_extract.yaml
 ### Extract and Transform (Optional)
 
 - To **only extract** raw data (no transformation), use `extract.py` with the same argument structure.
-- To **only transform** existing raw data, use `transform.py` with the same arguments (except `--timestamp` is not supported here).
+- To **only transform** existing raw data, use `transform.py` with the same arguments (`--timestamp` files are currently not supported here).
 
 ---
 
