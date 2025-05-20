@@ -1,11 +1,11 @@
-# Financial Analysis ETL Pipeline with Quantum Stock Analysis
+# Financial Analysis ETL Pipeline
 
 This project is an end-to-end ETL pipeline that:
 
 - Extracts stock market data (stock prices, income statements, balance sheets, and cashflows) from the [Financial Modeling Prep API](https://site.financialmodelingprep.com/),
 - Transforms and loads the data into a PostgreSQL database,
-- Performs financial computations and generates key indicators,
-- Exports the processed data to Excel and updates a Power BI dashboard.
+- Performs financial computations and generates key indicators for analysis,
+- Exports statement and indicator data in tidy long format to csv files. Exports stock data to csv files. (In progress)
 
 ---
 
