@@ -98,7 +98,7 @@ pip install -r requirements.txt
 
 #### Configuration
 
-1. Open the `config` folder and locate `example_env.txt`.
+1. Open the `config` folder and edit `example_env.txt`.
 2. Fill in your FMP API key and PostgreSQL credentials.
 3. Rename the file to `.env`.
 
