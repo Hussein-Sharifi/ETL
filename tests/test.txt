@@ -2,7 +2,7 @@ From financial_analysis directory, run
 
 
 Manual test:
-python ETL.py --manual --symbols AAPL MSFT --requests all --queries "from=2025-04-01" "to=2025-05-01" "period=annual" "limit=1" --save_to overwrite --timestamp
+python scripts/ETL.py --manual --symbols AAPL MSFT --requests all --queries "from=2025-04-01" "to=2025-05-01" "period=annual" "limit=1" --save_to overwrite --timestamp
 
 
 yaml test:

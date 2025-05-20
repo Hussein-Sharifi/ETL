@@ -23,7 +23,7 @@ def get_parser_args():
     parser.add_argument('--symbols', nargs='+', help='List of ticker symbols')
     parser.add_argument('--requests', nargs='+', help='Choose endpoint to fetch from the API. Options: "stock", "statements", or "all"')
     parser.add_argument('--queries', nargs='+', help='Query parameters like "from=2022-01-01" "to=2022-12-31"')
-    parser.add_argument('--save_to', help='Folder name to save data. Uppercase and lowercase letters, numbers, and underscores only. This will also be used as SQL table name prefix.')
+    parser.add_argument('--save_to', help='Folder name to save data. Lowercase letters, numbers, and underscores only. This will be used as SQL table name prefix.')
     parser.add_argument('--timestamp', action='store_true', help='Adds timestamp to saved file names. Use for scheduled jobs.')
 
     args = parser.parse_args()

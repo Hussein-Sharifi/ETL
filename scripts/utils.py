@@ -158,7 +158,7 @@ def long_format(dfs: dict) -> pd.DataFrame:
 
     # Identify columns to keep as identifiers and columns to drop
     id_vars = ['date', 'symbol']
-    drop_columns = ['link', 'finalLink', 'fillingDate', 'acceptedDate', 'calendarYear', 'period']
+    drop_columns = ['link', 'reportedCurrency', 'cik', 'finalLink', 'fillingDate', 'acceptedDate', 'calendarYear', 'period']
     
     # Melt each statement DataFrame
     melted_frames = [
