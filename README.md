@@ -74,7 +74,7 @@ git clone https://github.com/Hussein-Sharifi/ETL
 
 To ensure compatibility, it’s recommended to use a clean Conda environment.
 
-### 	1. Using Conda (Recommended)
+### 1. Using Conda (Recommended)
 
 From the project root directory, create the environment:
 
@@ -88,7 +88,7 @@ Once installed, activate the environment:
 conda activate FAenv
 ```
 
-###	2. Without Conda (Using pip)
+### 2. Without Conda (Using pip)
 
 If you prefer not to use Conda, install the required dependencies using pip:
 
@@ -123,13 +123,13 @@ The main pipeline script is `ETL.py`. It accepts several arguments to customize 
 - `--save_to`: Folder name for saving raw and processed data. Also used as a prefix for SQL tables.
 - `--timestamp`: Boolean flag to append timestamps to filenames. This argument will also append new data to SQL tables instead of overwriting them (useful for scheduled tasks).
 
-#### Example (Manual Arguments)
+#### 1. Example (Manual Arguments)
 
 ```
 python scripts/ETL.py --manual --symbols AAPL MSFT --requests all --queries "from=2025-04-01" "to=2025-05-01" "period=annual" "limit=1" --save_to foldername --timestamp
 ```
 
-#### Example (YAML Config)
+#### 2. Example (YAML Config)
 
 1. Edit `tests/test_extract.yaml` with your desired arguments.
 2. Run the script:
