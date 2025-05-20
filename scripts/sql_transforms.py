@@ -2,14 +2,15 @@ from sql_utils import connect_to_postgresql, create_indicators
 from sqlalchemy import text
 from utils import long_format
 import logging
+import os
 import pandas as pd
+from config import DATA_DIR
 
 # logging configuration
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s"
 )
-
 
 def main(stocks, wide_statements, tidy_statements, folder_name, documents, timestamp = False):
     # Connect to PostgreSQL and return connection instance
@@ -37,6 +38,9 @@ def main(stocks, wide_statements, tidy_statements, folder_name, documents, times
             chunksize=10000
         )
         logging.info(f"Table {folder_name}_stocks successfully created/updated.")
+        # Save to csv
+        os.makedirs(f"{DATA_DIR}\\processed\\{folder_name}", exist_ok=True)
+        stocks.to_csv(f"{DATA_DIR}\\processed\\{folder_name}\\stocks.csv", index=False)
     if documents == 'all' or 'statements':
         wide_statements.to_sql(
             f"{folder_name}_statements", 
@@ -60,6 +64,8 @@ def main(stocks, wide_statements, tidy_statements, folder_name, documents, times
     # Convert indicators to long format
     logging.info("Converting indicators to long format...")
     tidy_indicators = long_format(indicators)
+    # Save indicators to csv
+    tidy_indicators.to_csv(f"{DATA_DIR}\\processed\\{folder_name}\\indicators.csv", index=False)
 
 
     # Replace wide format statements with long format in PostgreSQL
@@ -87,6 +93,8 @@ def main(stocks, wide_statements, tidy_statements, folder_name, documents, times
         chunksize=10000
     )
     logging.info(f"Table {folder_name}_tidy successfully created.")
+    # Save statements to csv
+    tidy_statements.to_csv(f"{DATA_DIR}\\processed\\{folder_name}\\tidy.csv", index=False)
     
     # Drop the original tables
     logging.info("Dropping wide tables...")
