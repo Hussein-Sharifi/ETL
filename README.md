@@ -36,6 +36,7 @@ Project_Root
 │   .gitignore
 │   environment.yml
 │   README.md
+│   requirements.txt
 │
 ├───config
 │       default_endpoints.json
@@ -45,23 +46,21 @@ Project_Root
 │   ├───processed
 │   └───raw
 │
-├───outputs
-│   
 ├───scripts
-│       config.py
-│       extract.py
-│       FA_io.py
-│       fmp_client.py
-│       parser.py
-│       sql_transforms.py
-│       sql_utils.py
-│       transform.py
-│       utils.py
-│       ETL.py
+│      config.py
+│      ETL.py
+│      extract.py
+│      FA_io.py
+│      fmp_client.py
+│      parser.py
+│      sql_transforms.py
+│      sql_utils.py
+│      transform.py
+│      utils.py
 │
 └───tests
-        test_extract.txt
-        test_extract.yaml
+        test.txt
+        test.yaml
 ```
 
 
@@ -191,7 +190,7 @@ python scripts/ETL.py --config tests/test_extract.yaml
 | Interest Coverage            | ebitda / interestExpense                                                |
 | Net Debt to EBITDA           | (totalDebt - cashAndCashEquivalents) / ebitda                          |
 
-## Liquidity Indicators
+#### Liquidity Indicators
 
 | Indicator                          | Formula                                                                 |
 |-----------------------------------|-------------------------------------------------------------------------|
@@ -249,5 +248,4 @@ If you would like to add any indicators of your own, you can easily do so by mod
 
 ## License & Data Usage
 
-This project uses data provided by the Financial Modeling Prep (FMP) public API. All data is used strictly for educational purposes and is not redistributed.  
-Source code, models, and visualizations are shared under fair use for learning and demonstration only.
+This project uses data provided by the Financial Modeling Prep (FMP) public API. All data is used strictly for educational purposes and is not redistributed. Source code, models, and visualizations are shared under fair use for learning and demonstration only.
