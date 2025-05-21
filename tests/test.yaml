@@ -9,4 +9,4 @@ queries:
     - period=annual
     - limit=1
 save_to: foldername
-timestamp
+timestamp: True

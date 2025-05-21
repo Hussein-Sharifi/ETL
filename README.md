@@ -138,7 +138,7 @@ python scripts/ETL.py --manual --symbols AAPL MSFT --requests all --queries "fro
 2. Run the script:
 
 ```
-python scripts/ETL.py --config tests/test_extract.yaml
+python scripts/ETL.py --config <absolute_yaml_path>
 ```
 
 ### What the Script Does
