@@ -4,7 +4,7 @@ Built a modular ETL pipeline that automates the extraction and processing of his
 
 - Data Source: All financial data is collected from the Financial Modelling Prep (FMP) API, which aggregates filings from the U.S. SEC.
 
-- Indicators: Financial indicators are computed in SQL using standardized formulas (see [Indicator Formulas](#indicator-formulas) section). (In progress)
+- Indicators: Financial indicators are computed in SQL using standardized formulas (see [Indicator Formulas](#indicator-formulas) section).
 
 - Export Format: Processed data is output in a tidy long format, structured for compatibility with Power BI dashboards or other analytical tools.
 
