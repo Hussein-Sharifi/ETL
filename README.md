@@ -4,11 +4,11 @@ Built a modular ETL pipeline that automates the extraction and processing of his
 
 - Data Source: All financial data is collected from the Financial Modelling Prep (FMP) API, which aggregates filings from the U.S. SEC.
 
-- Indicators: Financial indicators are computed in SQL using standardized formulas (see Indicator Formulas section). (In progress)
+- Indicators: Financial indicators are computed in SQL using standardized formulas (see [Indicator Formulas](#indicator-formulas) section). (In progress)
 
 - Export Format: Processed data is output in a tidy long format, structured for compatibility with Power BI dashboards or other analytical tools.
 
-- Data Traceability: Each financial statement entry includes a reference to the original SEC filing via the finalLink field, enabling manual verification of reported figures.
+- Data Traceability: Each financial statement entry includes a reference to the original SEC filings, enabling manual verification of reported figures. These are accessible via the finalLink field, available through raw and processed statement files.
 
 - Automation: the ETL script is designed to allow updating stocks/statements data separately. This allows user to update dashboards with new data automatically by using scheduled tasks. 
 
@@ -24,7 +24,8 @@ Built a modular ETL pipeline that automates the extraction and processing of his
    4. [Running the ETL Script](#running-the-etl-script)  
    5. [Extract Only (Optional)](#extract-only-optional)  
 3. [Indicator Formulas](#indicator-formulas)
-4. [License & Data Usage](#license--data-usage)
+4. [Indicator Customization](#indicator-customization)
+5. [License & Data Usage](#license--data-usage)
 
 ---
 
@@ -164,8 +165,87 @@ python scripts/ETL.py --config tests/test_extract.yaml
 
 ## Indicator Formulas
 
+#### Profitability Indicators
 
+| Indicator                     | Formula                                                                 |
+|------------------------------|-------------------------------------------------------------------------|
+| Naive ROE                    | netIncome / totalEquity                                                 |
+| Naive ROA                    | netIncome / totalAssets                                                 |
+| Simplified ROIC              | (netIncome - dividendsPaid) / (totalDebt + totalEquity)                |
+| Gross Profit Margin          | grossProfit / revenue                                                   |
+| Operating Margin             | operatingIncome / revenue                                               |
+| Operating Income Ratio       | operatingIncomeRatio                                                    |
+| Net Profit Margin            | netIncome / revenue                                                     |
+| EBITDA Margin                | ebitda / revenue                                                        |
+| Earnings Per Share (EPS)     | eps                                                                     |
+| Diluted Earnings Per Share   | epsdiluted                                                              |
 
+#### Leverage Indicators
+
+| Indicator                     | Formula                                                                 |
+|------------------------------|-------------------------------------------------------------------------|
+| Naive Debt-to-Equity         | totalDebt / totalEquity                                                 |
+| Naive Equity Ratio           | totalEquity / totalAssets                                               |
+| Naive Debt Ratio             | totalDebt / totalAssets                                                 |
+| Naive Debt-to-Capital        | totalDebt / (totalDebt + totalEquity)                                   |
+| Interest Coverage            | ebitda / interestExpense                                                |
+| Net Debt to EBITDA           | (totalDebt - cashAndCashEquivalents) / ebitda                          |
+
+## Liquidity Indicators
+
+| Indicator                          | Formula                                                                 |
+|-----------------------------------|-------------------------------------------------------------------------|
+| Current Ratio                     | totalCurrentAssets / totalCurrentLiabilities                            |
+| Quick Ratio                       | (cashAndCashEquivalents + shortTermInvestments + accountsReceivables) / totalCurrentLiabilities |
+| Cash Ratio                        | cashAndCashEquivalents / totalCurrentLiabilities                        |
+| Operating Cash Flow to CapEx      | operatingCashFlow / ABS(capitalExpenditure)                             |
+| Operating Cash Flow Ratio         | operatingCashFlow / totalCurrentLiabilities                             |
+
+Note: Indicators labeled as "Naive" are typically averaged quarterly to produce more consistent and reliable results. However, accessing quarterly financial statements requires a subscription to FMP. To maintain broader usability of this ETL pipeline without imposing subscription constraints, I’ve chosen to use annual metrics instead. While these metrics may be less granular, they remain valuable for identifying trends and are clearly labeled to inform user discretion.
+
+---
+
+## Indicator Customization
+
+If you would like to add any indicators of your own, you can easily do so by modifying the selection in scripts/sql_utils.py. Here is a list of metrics available through raw statements data:
+
+| Metric 1 | Metric 2 | Metric 3 |
+|----------|----------|----------|
+| revenue    | costOfRevenue | grossProfit |
+| grossProfitRatio | researchAndDevelopmentExpenses | generalAndAdministrativeExpenses |
+| sellingAndMarketingExpenses | sellingGeneralAndAdministrativeExpenses | otherExpenses |
+| operatingExpenses | costAndExpenses | interestIncome |
+| interestExpense | depreciationAndAmortization | ebitda     |
+| ebitdaratio | operatingIncome | operatingIncomeRatio |
+| totalOtherIncomeExpensesNet | incomeBeforeTax | incomeBeforeTaxRatio |
+| incomeTaxExpense | netIncome  | netIncomeRatio |
+| eps        | epsdiluted | weightedAverageShsOut |
+| weightedAverageShsOutDil | cashAndCashEquivalents | shortTermInvestments |
+| cashAndShortTermInvestments | netReceivables | inventory  |
+| otherCurrentAssets | totalCurrentAssets | propertyPlantEquipmentNet |
+| goodwill   | intangibleAssets | goodwillAndIntangibleAssets |
+| longTermInvestments | taxAssets  | otherNonCurrentAssets |
+| totalNonCurrentAssets | otherAssets | totalAssets |
+| accountPayables | shortTermDebt | taxPayables |
+| deferredRevenue | otherCurrentLiabilities | totalCurrentLiabilities |
+| longTermDebt | deferredRevenueNonCurrent | deferredTaxLiabilitiesNonCurrent |
+| otherNonCurrentLiabilities | totalNonCurrentLiabilities | otherLiabilities |
+| capitalLeaseObligations | totalLiabilities | preferredStock |
+| commonStock | retainedEarnings | accumulatedOtherComprehensiveIncomeLoss |
+| othertotalStockholdersEquity | totalStockholdersEquity | totalEquity |
+| totalLiabilitiesAndStockholdersEquity | minorityInterest | totalLiabilitiesAndTotalEquity |
+| totalInvestments | totalDebt  | netDebt    |
+| deferredIncomeTax | stockBasedCompensation | changeInWorkingCapital |
+| accountsReceivables | accountsPayables | otherWorkingCapital |
+| otherNonCashItems | netCashProvidedByOperatingActivities | investmentsInPropertyPlantAndEquipment |
+| acquisitionsNet | purchasesOfInvestments | salesMaturitiesOfInvestments |
+| otherInvestingActivites | netCashUsedForInvestingActivites | debtRepayment |
+| commonStockIssued | commonStockRepurchased | dividendsPaid |
+| otherFinancingActivites | netCashUsedProvidedByFinancingActivities | effectOfForexChangesOnCash |
+| netChangeInCash | cashAtEndOfPeriod | cashAtBeginningOfPeriod |
+| operatingCashFlow | capitalExpenditure | freeCashFlow |
+
+--- 
 
 ## License & Data Usage
 

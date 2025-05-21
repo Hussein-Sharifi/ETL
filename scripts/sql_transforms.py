@@ -24,7 +24,8 @@ def main(stocks, wide_statements, tidy_statements, folder_name, documents, times
         if_exists = 'append'
     else:
         if_exists = 'replace'
-
+    # Make directory for processed data
+    os.makedirs(f"{DATA_DIR}\\processed\\{folder_name}", exist_ok=True)
 
     # Upload dataframes to PostgreSQL
     logging.info("Uploading dataframes to PostgreSQL...")
@@ -39,7 +40,6 @@ def main(stocks, wide_statements, tidy_statements, folder_name, documents, times
         )
         logging.info(f"Table {folder_name}_stocks successfully created/updated.")
         # Save to csv
-        os.makedirs(f"{DATA_DIR}\\processed\\{folder_name}", exist_ok=True)
         stocks.to_csv(f"{DATA_DIR}\\processed\\{folder_name}\\stocks.csv", index=False)
     if not wide_statements.empty:
         wide_statements.to_sql(
