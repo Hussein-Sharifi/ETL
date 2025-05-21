@@ -21,7 +21,7 @@ def get_parser_args():
 
     # Add arguments for manual input
     parser.add_argument('--symbols', nargs='+', help='List of ticker symbols')
-    parser.add_argument('--requests', nargs='+', help='Choose endpoint to fetch from the API. Options: "stock", "statements", or "all"')
+    parser.add_argument('--requests', nargs='+', help='Choose endpoint to fetch from the API. Options: "stocks", "statements", or "all"')
     parser.add_argument('--queries', nargs='+', help='Query parameters like "from=2022-01-01" "to=2022-12-31"')
     parser.add_argument('--save_to', help='Folder name to save data. Lowercase letters, numbers, and underscores only. This will be used as SQL table name prefix.')
     parser.add_argument('--timestamp', action='store_true', help='Adds timestamp to saved file names. Use for scheduled jobs.')
@@ -92,10 +92,10 @@ def parse_inputs(symbols: list, requests: list, queries: list = None, save_to: s
         elif request == 'statements':
             requests = ['income_statement', 'cashflow', 'balance_sheet']
             break
-        elif request == 'stock':
+        elif request == 'stocks':
             requests = ['stock']
             break
-        elif request not in ['stock', 'statements', 'all']:
-            raise KeyError(f"Did not recognize {request} request argument. Options: 'stock', 'statements', or 'all'")
+        elif request not in ['stocks', 'statements', 'all']:
+            raise KeyError(f"Did not recognize {request} request argument. Options: 'stocks', 'statements', or 'all'")
     
     return symbols, requests, queries, save_to, timestamp

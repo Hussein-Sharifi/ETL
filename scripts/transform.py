@@ -27,9 +27,17 @@ def main(symbols: list, documents: list, load_from: str, timestamp = False):
     # Parse data to DataFrames
     logging.info("Parsing data to DataFrames...")
     dfs = parse_to_dataframes(data)
-    stocks = dfs.pop('stock')
-    super_wide = wide_format(dfs)
-    tidy_statements = long_format(dfs)
+    if 'stock' in documents:
+        stocks = dfs.pop('stock')
+    else:
+        stocks = pd.DataFrame()
+    
+    if 'balance_sheet' in documents:
+        super_wide = wide_format(dfs)
+        tidy_statements = long_format(dfs)
+    else:
+        super_wide = pd.DataFrame()
+        tidy_statements = pd.DataFrame()
 
     # Load data to PostgreSQL
     # Compute statement indicators with SQL

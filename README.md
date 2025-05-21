@@ -4,13 +4,13 @@ Built a modular ETL pipeline that automates the extraction and processing of his
 
 - Data Source: All financial data is collected from the Financial Modelling Prep (FMP) API, which aggregates filings from the U.S. SEC.
 
-- Indicators: Financial indicators are computed in SQL using standardized formulas (see Indicator Formulas, in progress).
+- Indicators: Financial indicators are computed in SQL using standardized formulas (see Indicator Formulas section). (In progress)
 
 - Export Format: Processed data is output in a tidy long format, structured for compatibility with Power BI dashboards or other analytical tools.
 
 - Data Traceability: Each financial statement entry includes a reference to the original SEC filing via the finalLink field, enabling manual verification of reported figures.
 
-- Automation: the ETL script is designed to allow updating stock/statement data using scheduled tasks. This allows user to update dashboards with new data automatically. (in progress)
+- Automation: the ETL script is designed to allow updating stocks/statements data separately. This allows user to update dashboards with new data automatically by using scheduled tasks. 
 
 ---
 
@@ -22,8 +22,9 @@ Built a modular ETL pipeline that automates the extraction and processing of his
    2. [Without Conda (Using pip)](#without-conda-using-pip)  
    3. [Configuration](#configuration)  
    4. [Running the ETL Script](#running-the-etl-script)  
-   5. [Extract and Transform (Optional)](#extract-and-transform-optional)  
-3. [License & Data Usage](#license--data-usage)
+   5. [Extract Only (Optional)](#extract-only-optional)  
+3. [Indicator Formulas](#indicator-formulas)
+4. [License & Data Usage](#license--data-usage)
 
 ---
 
@@ -114,7 +115,7 @@ The main pipeline script is `ETL.py`. It accepts several arguments to customize 
 - `--manual`: Indicates arguments will be passed directly in the CLI.
 - `--config`: Path to a YAML file with pre-defined arguments.
 - `--symbols`: Space-separated list of stock symbols (e.g., `AAPL MSFT GOOG`).
-- `--requests`: Type of data to fetch (`stock`, `statement`, or `all`). Currently, only `all` is supported.
+- `--requests`: Type of data to fetch (`stocks`, `statements`, or `all`).
 - `--queries`: space-separated API query parameters in the format:
   - `"from=YYYY-MM-DD"`  (Beginning and ending period for fetching stocks)
   - `"to=YYYY-MM-DD"`
@@ -122,6 +123,8 @@ The main pipeline script is `ETL.py`. It accepts several arguments to customize 
   - `"limit=<integer>"`  (Number of statements to fetch)
 - `--save_to`: Folder name for saving raw and processed data. Also used as a prefix for SQL tables.
 - `--timestamp`: Boolean flag to append timestamps to filenames. This argument will also append new data to SQL tables instead of overwriting them (useful for scheduled tasks).
+
+You need to specify whether arguments are passed manually or using config YAML file. i.e. these arguments are mutually exclusive. All other arguments are required except timestamp. Note that you should still pass all queries even if only processing stocks or statements.
 
 #### 1. Example (Manual Arguments)
 
@@ -153,12 +156,15 @@ python scripts/ETL.py --config tests/test_extract.yaml
   - `<foldername>_indicators`
 - Saves the three tidy tables as CSV files in `data/processed/<foldername>`
 
-### Extract and Transform (Optional)
+### Extract Only (Optional)
 
-- To **only extract** raw data (no transformation), use `extract.py` with the same argument structure.
-- To **only transform** existing raw data, use `transform.py` with the same arguments (`--timestamp` files are currently not supported here).
+- To only extract raw data (no transformation), use `extract.py` with the same argument structure.
 
 ---
+
+## Indicator Formulas
+
+
 
 
 ## License & Data Usage
