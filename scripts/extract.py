@@ -48,7 +48,7 @@ if __name__ == "__main__":
     
     ''' Example usage: 
     Pass CLI arguments through yaml file:
-    python extract.py --config tests/test.yaml
+    python extract.py --config <yaml_abs_path>
 
     Pass CLI arguments manually:
     python extract.py --manual --symbols AAPL MSFT GOOGL --requests all --queries "from=2022-05-01" "to=2023-05-01" "period=quarter" "limit=4" --save_to timestamp
