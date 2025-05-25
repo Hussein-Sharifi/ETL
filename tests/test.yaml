@@ -8,5 +8,5 @@ queries:
     - to=2025-05-05
     - period=annual
     - limit=1
-save_to: foldername
+save_to: test
 timestamp: True

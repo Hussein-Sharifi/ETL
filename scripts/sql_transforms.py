@@ -27,9 +27,9 @@ def main(stocks, wide_statements, tidy_statements, folder_name, documents, times
     # Make directory for processed data
     os.makedirs(f"{DATA_DIR}\\processed\\{folder_name}", exist_ok=True)
     if timestamp:
-        append_time = f"_{timestamp}"
+        append_time = f"_{timestamp}.csv"
     else:
-        append_time = ""
+        append_time = ".csv"
 
     # Upload dataframes to PostgreSQL
     logging.info("Uploading dataframes to PostgreSQL...")
@@ -44,7 +44,7 @@ def main(stocks, wide_statements, tidy_statements, folder_name, documents, times
         )
         logging.info(f"Table {folder_name}_stocks successfully created/updated.")
         # Save to csv
-        stocks.to_csv(f"{DATA_DIR}\\processed\\{folder_name}\\stocks.csv" + append_time, index=False)
+        stocks.to_csv(f"{DATA_DIR}\\processed\\{folder_name}\\stocks" + append_time, index=False)
     if not wide_statements.empty:
         wide_statements.to_sql(
             f"{folder_name}_statements", 
@@ -69,7 +69,7 @@ def main(stocks, wide_statements, tidy_statements, folder_name, documents, times
         logging.info("Converting indicators to long format...")
         tidy_indicators = long_format(indicators)
         # Save indicators to csv
-        tidy_indicators.to_csv(f"{DATA_DIR}\\processed\\{folder_name}\\indicators.csv" + append_time, index=False)
+        tidy_indicators.to_csv(f"{DATA_DIR}\\processed\\{folder_name}\\indicators" + append_time, index=False)
 
 
         # Replace wide format statements with long format in PostgreSQL
@@ -98,7 +98,7 @@ def main(stocks, wide_statements, tidy_statements, folder_name, documents, times
         )
         logging.info(f"Table {folder_name}_tidy successfully created.")
         # Save statements to csv
-        tidy_statements.to_csv(f"{DATA_DIR}\\processed\\{folder_name}\\tidy.csv" + append_time, index=False)
+        tidy_statements.to_csv(f"{DATA_DIR}\\processed\\{folder_name}\\tidy" + append_time, index=False)
     
         # Drop the original tables
         logging.info("Dropping wide tables...")

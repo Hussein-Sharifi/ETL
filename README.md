@@ -154,7 +154,7 @@ python scripts/ETL.py --config <absolute_yaml_path>
   - `<foldername>_stocks`
   - `<foldername>_tidy` (contains original statements)
   - `<foldername>_indicators`
-- Saves the three tidy tables as CSV files in `data/processed/<foldername>`
+- Saves the three tidy tables as CSV files in `dataprocessed/<foldername>`
 
 ### Extract Only (Optional)
 

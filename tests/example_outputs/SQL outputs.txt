@@ -1,0 +1,42 @@
+SELECT * FROM test_indicators LIMIT 10;
+        date         | symbol |       metric        |        value        | statement_type
+---------------------+--------+---------------------+---------------------+----------------
+ 2024-09-28 00:00:00 | AAPL   | naive_roe           |  1.6459350307287095 | profitability
+ 2024-06-30 00:00:00 | MSFT   | naive_roe           | 0.32828137978299815 | profitability
+ 2024-09-28 00:00:00 | AAPL   | naive_roa           | 0.25682503150857583 | profitability
+ 2024-06-30 00:00:00 | MSFT   | naive_roa           | 0.17208583985957596 | profitability
+ 2024-09-28 00:00:00 | AAPL   | simplified_roic     |  0.6661613043239046 | profitability
+ 2024-06-30 00:00:00 | MSFT   | simplified_roic     |  0.3274901371854924 | profitability
+ 2024-09-28 00:00:00 | AAPL   | gross_profit_margin |  0.4620634981523393 | profitability
+ 2024-06-30 00:00:00 | MSFT   | gross_profit_margin |  0.6976444382797138 | profitability
+ 2024-09-28 00:00:00 | AAPL   | operating_margin    | 0.31510222870075566 | profitability
+ 2024-06-30 00:00:00 | MSFT   | operating_margin    | 0.44644299573273716 | profitability
+(10 rows)
+
+
+SELECT * FROM test_stocks LIMIT 10;
+        date         | symbol |  open  |  high  |  low   | close  | adjClose |  volume   | unadjustedVolume | change | changePercent |   vwap   |   label    | changeOverTime
+---------------------+--------+--------+--------+--------+--------+----------+-----------+------------------+--------+---------------+----------+------------+----------------
+ 2025-05-05 00:00:00 | AAPL   |  203.1 |  204.1 | 198.21 | 198.89 |   198.63 |  69018500 |         69018500 |  -4.21 |         -2.07 |  201.075 | May 05, 25 |        -0.0207
+ 2025-05-02 00:00:00 | AAPL   | 206.09 | 206.99 | 202.16 | 205.35 |   205.08 | 101010621 |        101010621 |  -0.74 |      -0.35907 | 205.1475 | May 02, 25 |     -0.0035907
+ 2025-05-01 00:00:00 | AAPL   | 209.08 | 214.56 |  208.9 | 213.32 |   213.04 |  57365700 |         57365700 |   4.24 |          2.03 |  211.465 | May 01, 25 |         0.0203
+ 2025-05-05 00:00:00 | MSFT   | 432.87 |  439.5 | 432.11 | 436.17 |   435.37 |  20136100 |         20136100 |    3.3 |       0.76235 | 435.1625 | May 05, 25 |      0.0076235
+ 2025-05-02 00:00:00 | MSFT   | 431.74 | 439.44 | 429.99 | 435.28 |   434.48 |  30757434 |         30757434 |   3.54 |       0.81994 | 434.1125 | May 02, 25 |      0.0081994
+ 2025-05-01 00:00:00 | MSFT   | 431.11 | 436.99 |  424.9 |  425.4 |   424.62 |  58938100 |         58938100 |  -5.71 |         -1.32 |    429.6 | May 01, 25 |        -0.0132
+(6 rows)
+
+
+SELECT * FROM test_tidy LIMIT 10;
+        date         | symbol |             metric             |    value     |  statement_type
+---------------------+--------+--------------------------------+--------------+------------------
+ 2024-09-28 00:00:00 | AAPL   | revenue                        | 391035000000 | income_statement
+ 2024-06-30 00:00:00 | MSFT   | revenue                        | 245122000000 | income_statement
+ 2024-09-28 00:00:00 | AAPL   | costOfRevenue                  | 210352000000 | income_statement
+ 2024-06-30 00:00:00 | MSFT   | costOfRevenue                  | 74114000000  | income_statement
+ 2024-09-28 00:00:00 | AAPL   | grossProfit                    | 180683000000 | income_statement
+ 2024-06-30 00:00:00 | MSFT   | grossProfit                    | 171008000000 | income_statement
+ 2024-09-28 00:00:00 | AAPL   | grossProfitRatio               | 0.4620634982 | income_statement
+ 2024-06-30 00:00:00 | MSFT   | grossProfitRatio               | 0.6976444383 | income_statement
+ 2024-09-28 00:00:00 | AAPL   | researchAndDevelopmentExpenses | 31370000000  | income_statement
+ 2024-06-30 00:00:00 | MSFT   | researchAndDevelopmentExpenses | 29510000000  | income_statement
+(10 rows)
