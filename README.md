@@ -1,6 +1,6 @@
 # Automated Financial Data ETL Pipeline
 
-Built a modular ETL pipeline that automates the extraction and processing of historical stock prices and company financial statements (income, balance sheet, and cash flow) using a public API. The pipeline computes key financial indicators in PostgreSQL, organized into profitability, leverage, and liquidity categories. All raw and processed data, including calculated metrics, are stored in PostgreSQL tables and exported as CSV files for external use or downstream analysis. See test folder for example raw and processed outputs.
+Built a modular ETL pipeline that automates the extraction and processing of historical stock prices and company financial statements (income, balance sheet, and cash flow) using a public API. The pipeline computes key financial indicators in PostgreSQL, organized into profitability, leverage, and liquidity categories. Raw and processed data, including calculated metrics, are stored in PostgreSQL tables and exported as CSV files for external use or downstream analysis. See test folder for example raw and processed outputs.
 
 - Data Source: All financial data is collected from the Financial Modelling Prep (FMP) API, which aggregates filings from the U.S. SEC. This ETL's processes are built on FMP's free tier. 
 
