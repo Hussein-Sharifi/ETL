@@ -244,4 +244,6 @@ If you would like to add any indicators of your own, you can easily do so by mod
 
 ## License & Data Usage
 
-This project uses data provided by the Financial Modeling Prep (FMP) public API. All data is used strictly for educational purposes and is not redistributed. Source code, models, and visualizations are shared under fair use for learning and demonstration only.
+- This project is licensed under the [Creative Commons Attribution-NonCommercial 4.0 International License](https://creativecommons.org/licenses/by-nc/4.0/).
+
+- This project uses data provided by the Financial Modeling Prep (FMP) public API. All data is used strictly for educational purposes and is not redistributed. Source code, models, and visualizations are shared under fair use for learning and demonstration only.
