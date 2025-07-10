@@ -117,7 +117,7 @@ The main pipeline script is `ETL.py`. It accepts several arguments to customize 
   - `"to=YYYY-MM-DD"`
   - `"period=annual|quarterly"` (Note: quarterly statement data requires an FMP subscription)
   - `"limit=<integer>"`  (Number of statements to fetch)
-- `--save_to`: Folder name for saving raw and processed data. Also used as a prefix for SQL tables.
+- `--save_to`: Folder name for saving raw and processed data. Also used as a prefix for SQL tables. Lowercase only.
 - `--timestamp`: Boolean flag to append timestamps to filenames. This argument will also append new data to SQL tables instead of overwriting them (useful for scheduled tasks).
 
 You need to specify whether arguments are passed manually or using config YAML file. i.e. these arguments are mutually exclusive. All other arguments are required except timestamp. Note that you should still pass all queries even if only processing stocks or statements.
